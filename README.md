@@ -8,7 +8,7 @@ It's a Java web application. Therefore, to build it, you'll need Java JDK 7 and 
 
 BUILD AND DEPLOY
 ===============
-This project is maven-based. To build it, ensure you haven Maven 3 installed, then run:
+This project is maven-based. To build it, ensure you have Maven 3 installed, then run:
 
 mvn clean install
 
