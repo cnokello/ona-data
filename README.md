@@ -25,7 +25,7 @@ This should return
 
 {"message":"Request processing successful","responseCode":200,"data":"This is just a test. It was successful"}
 
-if the application deployment was started successfully.
+if the application deployment and startup was successful.
 
 PROCESSING THE JSON FILE
 ========================
