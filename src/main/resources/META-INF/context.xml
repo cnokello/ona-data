@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:util="http://www.springframework.org/schema/util" 
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+          http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+          http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+       	  http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+	
+	
+	 
+	<context:annotation-config/>
+	<context:component-scan base-package="io.ona.data" />
+  
+   <context:property-placeholder location="classpath:META-INF/config.properties"/>
+  	
+   <util:map id="propertiesMap">
+    <entry key="jaxb.formatted.output">
+       <value type="java.lang.Boolean">true</value>
+    </entry>
+   </util:map>
+   
+   <!-- CXF REST -->
+   <bean id="api" class="io.ona.data.service.Api"/>
+   <jaxrs:server id="jaxRsServer" address="/api">
+	    <jaxrs:serviceBeans>
+	        <ref bean="api"/>
+	    </jaxrs:serviceBeans>
+	    <jaxrs:providers>
+		    <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+            <bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
+                <property name="marshallerProperties" ref="propertiesMap"/>
+            </bean>
+            <bean class="io.ona.data.utils.JsonpProvider">
+                <property name="ignoreNamespaces" value="true" />
+                <property name="dropRootElement" value="false" />
+                <property name="supportUnwrapped" value="true" />
+            </bean>
+		</jaxrs:providers>
+    
+        <jaxrs:inInterceptors>
+            <bean class="org.apache.cxf.jaxrs.provider.jsonp.JsonpInInterceptor">
+                <property name="callbackParam" value="callback" />
+            </bean>
+        </jaxrs:inInterceptors>	
+        <jaxrs:outInterceptors>
+            <bean class="org.apache.cxf.jaxrs.provider.jsonp.JsonpPreStreamInterceptor">
+                <property name="mediaType" value="application/x-javascript" />
+            </bean>
+            <bean class="org.apache.cxf.jaxrs.provider.jsonp.JsonpPostStreamInterceptor"/>
+        </jaxrs:outInterceptors>
+        <jaxrs:extensionMappings>
+            <entry key="xml" value="application/xml"/>
+            <entry key="json" value="application/json"/>
+            <entry key="jsonp" value="application/javascript"/>
+        </jaxrs:extensionMappings>
+	</jaxrs:server>
+
+	<import resource="classpath:META-INF/cxf/cxf.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+       
+</beans>
