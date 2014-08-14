@@ -3,32 +3,35 @@ INTRODUCTION
 This is a demo app meant for Ona CTO and his team. It demostrates processing of remote json data. Specifically, it uses the data at:
 https://raw.githubusercontent.com/onaio/ona-tech/master/data/water_points.json
 
+It's a Java web application. Therefore, to build it, you'll need Java JDK 7 and Maven 3. To run it, you'll need a servlet container like Apache Tomcat.
+
+
 BUILD AND DEPLOY
 ===============
-This project is maven-based. To build it, run:
+This project is maven-based. To build it, ensure you haven Maven 3 installed, then run:
 
 mvn clean install
 
-This will create a web archive (.war) file that you dump into a servlet container like Apache Tomcat or an application server like JBoss.
+This will create a web archive (.war) file, named something like ona-data-xxx.war. Rename it to ona-data.war. Dump it into a servlet container like Apache Tomcat or an application server like JBoss.
 
 The application exposes a REST endpoint that can be invoked using the URL:
 
-http://hostname-or-ip:port/ona-data/api/getData?url=<url-of-data>
+http://hostname-or-ip:port/ona-data/api/getData?url=[url-of-data]
 
-But first, to test of the deployment is successful, invoke this endpint:
+But first, to test if the deployment was successful, invoke this endpint:
 http://hostname-or-ip:port/ona-data/api/test
 
 This should return 
 
 {"message":"Request processing successful","responseCode":200,"data":"This is just a test. It was successful"}
 
-if the application was started successfully.
+if the application deployment was started successfully.
 
-SAMPLE FILE PROCESSING
-======================
+PROCESSING THE JSON FILE
+========================
 Now to process a json file at a specified url, invoke this endpoint with the specified parameters:
 
-http://hostname-or-ip:port/ona-data/api/getData?url=https://raw.githubusercontent.com/onaio/ona-tech/master/data/water_points.json
+http://hostname-or-ip:port/ona-data/api/getData?url=https://raw.githubusercontent.com/onaio/ona-tech/master/data/water_points.json.
 
 With the data at the above specified URL, the result should be:
 
@@ -137,3 +140,10 @@ With the data at the above specified URL, the result should be:
         }
     }
 }
+
+JSON is the default response. However, you can also request for the data in XML format by adding 'format' query parameter. For example: 
+http://hostname-or-ip:port/ona-data/api/getData?url=https://raw.githubusercontent.com/onaio/ona-tech/master/data/water_points.json&format=xml
+
+Finally, you can also make JSONP requests by specifying a name of a callback function as one of the query parameters. For example:
+http://hostname-or-ip:port/ona-data/api/getData?url=https://raw.githubusercontent.com/onaio/ona-tech/master/data/water_points.json&callback=_callbackFn
+
