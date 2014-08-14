@@ -1,11 +1,14 @@
-README
-======
+INTRODUCTION
+===========
 This is a demo app meant for Ona CTO and his team. It demostrates processing of remote json data. Specifically, it uses the data at:
 https://raw.githubusercontent.com/onaio/ona-tech/master/data/water_points.json
 
-**BUILD AND DEPLOY**
+BUILD AND DEPLOY
+===============
 This project is maven-based. To build it, run:
+
 mvn clean install
+
 This will create a web archive (.war) file that you dump into a servlet container like Apache Tomcat or an application server like JBoss.
 
 The application exposes a REST endpoint that can be invoked using the URL:
@@ -21,7 +24,8 @@ This should return
 
 if the application was started successfully.
 
-**SAMPLE FILE PROCESSING**
+SAMPLE FILE PROCESSING
+======================
 Now to process a json file at a specified url, invoke this endpoint with the specified parameters:
 
 http://hostname-or-ip:port/ona-data/api/getData?url=https://raw.githubusercontent.com/onaio/ona-tech/master/data/water_points.json
